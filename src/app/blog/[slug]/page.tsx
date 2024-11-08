@@ -1,8 +1,16 @@
+import RecomendationBlog from "@/components/recomendation";
 import ShareButton from "@/components/share";
-import { getBlogs, getBlogSlug } from "@/libs/blog";
+import Wrapper from "@/components/wrapper";
+import { getBlogRecom, getBlogs, getBlogSlug } from "@/libs/blog";
 import { IBlog } from "@/types/blog";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import {
+  documentToReactComponents,
+  Options,
+} from "@contentful/rich-text-react-renderer";
+import { BLOCKS, MARKS } from "@contentful/rich-text-types";
 import Image from "next/image";
+import Link from "next/link";
+import { IoArrowBack } from "react-icons/io5";
 
 export const generateStaticParams = async () => {
   const blogs: IBlog[] = await getBlogs();
@@ -35,39 +43,68 @@ export default async function BlogDetail({
   params: { slug: string };
 }) {
   const blog: IBlog = await getBlogSlug(params.slug);
-  console.log(blog);
+  const blogNe: IBlog[] = await getBlogRecom(params.slug);
+
+  const options: Options = {
+    renderMark: {
+      [MARKS.ITALIC]: (text) => <span className="italic">{text}</span>,
+    },
+    renderNode: {
+      [BLOCKS.OL_LIST]: (node, children) => (
+        <ol className="list-decimal mx-6">{children}</ol>
+      ),
+      [BLOCKS.PARAGRAPH]: (node, children) => (
+        <p className="my-4">{children}</p>
+      ),
+      [BLOCKS.HEADING_2]: (node, children) => (
+        <h2 className="text-2xl my-4">{children}</h2>
+      ),
+    },
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="px-6 py-12 text-center">
-        <h1 className="text-lg text-green-600 font-semibold text-center">
-          {blog.fields.category}
-        </h1>
-        <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
-          {blog.fields.title}
-        </h2>
-        <p className="mt-4 text-gray-600">
-          {blog.fields.author.fields.name} {blog.fields.date}
-        </p>
-        <ShareButton slug={blog.fields.slug} />
-      </header>
-
-      <main className="max-w-4xl mx-auto p-4">
-        <div className="relative w-full h-64 sm:h-80 md:h-[450px] mb-8">
-          <Image
-            src={`https:${blog.fields.thumbnail.fields.file.url}`}
-            alt="thumbnail"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-lg shadow-lg"
-          />
-        </div>
-        <section className="text-gray-800">
-          <div className="text-lg leading-relaxed">
-            {documentToReactComponents(blog.fields.content)}
+    <Wrapper>
+      <div className="flex mt-6 w-full">
+        <div className=" flex-1 max-md:hidden">
+          <div className="sticky top-[100px]">
+            <div className="text-sm flex items-center gap-1">
+              <IoArrowBack />
+              <Link href={"/"} className="uppercase font-bold text-[12px] my-2">
+                Back
+              </Link>
+            </div>
+            <p className="font-bold my-2">Recommendation</p>
+            <RecomendationBlog blogs={blogNe} />
+            <ShareButton slug={blog.fields.slug} />
           </div>
-        </section>
-      </main>
-    </div>
+        </div>
+        <div className="flex-[2] box-content pr-56 max-lg:pr-0">
+          <div className="text-sm font-bold text-green-700 uppercase">
+            {blog.fields.category}
+          </div>
+          <div className="text-3xl max-md:text-2xl font-bold my-4">
+            {blog.fields.title}
+          </div>
+          <div className="flex gap-2 text-sm">
+            <span className="font-bold">{blog.fields.author.fields.name}</span>
+            <span>∙</span>
+            <span>{blog.fields.date}</span>
+          </div>
+          <div className="md:hidden">
+            <ShareButton slug={blog.fields.slug} />
+          </div>
+          <div className="h-[400px] max-md:h-[300px] max-sm:h-[250px] w-full relative my-6">
+            <Image
+              src={`https:${blog.fields.thumbnail.fields.file.url}`}
+              alt={blog.fields.slug}
+              fill
+              className="object-fill"
+              priority
+            />
+          </div>
+          {documentToReactComponents(blog.fields.content, options)}
+        </div>
+      </div>
+    </Wrapper>
   );
 }
