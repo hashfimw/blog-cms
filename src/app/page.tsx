@@ -1,4 +1,5 @@
 import Cards from "@/components/card";
+
 import Wrapper from "@/components/wrapper";
 import { getBlogs } from "@/libs/blog";
 import { IBlog } from "@/types/blog";

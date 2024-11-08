@@ -1,3 +1,4 @@
+import ShareButton from "@/components/share";
 import { getBlogs, getBlogSlug } from "@/libs/blog";
 import { IBlog } from "@/types/blog";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -39,7 +40,7 @@ export default async function BlogDetail({
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="px-6 py-12 text-center">
-        <h1 className="text-lg text-green-600 font-semibold">
+        <h1 className="text-lg text-green-600 font-semibold text-center">
           {blog.fields.category}
         </h1>
         <h2 className="mt-2 text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
@@ -48,6 +49,7 @@ export default async function BlogDetail({
         <p className="mt-4 text-gray-600">
           {blog.fields.author.fields.name} {blog.fields.date}
         </p>
+        <ShareButton slug={blog.fields.slug} />
       </header>
 
       <main className="max-w-4xl mx-auto p-4">
