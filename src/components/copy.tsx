@@ -16,7 +16,11 @@ export default function CopyButton({ link }: { link: string }) {
       }}
       onMouseLeave={() => setCopied(false)}
     >
-      {copied ? <FaCheck /> : <FaLink />}
+      {copied ? (
+        <FaCheck data-cy="check-icon" />
+      ) : (
+        <FaLink data-cy="link-icon" />
+      )}
     </div>
   );
 }
