@@ -1,6 +1,5 @@
 import RecomendationBlog from "@/components/recomendation";
 import ShareButton from "@/components/share";
-import Wrapper from "@/components/wrapper";
 import { getBlogRecom, getBlogs, getBlogSlug } from "@/libs/blog";
 import { IBlog } from "@/types/blog";
 import {
@@ -63,48 +62,46 @@ export default async function BlogDetail({
   };
 
   return (
-    <Wrapper>
-      <div className="flex mt-6 w-full">
-        <div className=" flex-1 max-md:hidden">
-          <div className="sticky top-[100px]">
-            <div className="text-sm flex items-center gap-1">
-              <IoArrowBack />
-              <Link href={"/"} className="uppercase font-bold text-[12px] my-2">
-                Back
-              </Link>
-            </div>
-            <p className="font-bold my-2">Recommendation</p>
-            <RecomendationBlog blogs={blogNe} />
-            <ShareButton slug={blog.fields.slug} />
+    <div className="container mx-auto flex mt-6 w-full">
+      <div className=" flex-1 max-md:hidden">
+        <div className="sticky top-[100px]">
+          <div className="text-sm flex items-center gap-1">
+            <IoArrowBack />
+            <Link href={"/"} className="uppercase font-bold text-[12px] my-2">
+              Back
+            </Link>
           </div>
-        </div>
-        <div className="flex-[2] box-content pr-56 max-lg:pr-0">
-          <div className="text-sm font-bold text-green-700 uppercase">
-            {blog.fields.category}
-          </div>
-          <div className="text-3xl max-md:text-2xl font-bold my-4">
-            {blog.fields.title}
-          </div>
-          <div className="flex gap-2 text-sm">
-            <span className="font-bold">{blog.fields.author.fields.name}</span>
-            <span>∙</span>
-            <span>{blog.fields.date}</span>
-          </div>
-          <div className="md:hidden">
-            <ShareButton slug={blog.fields.slug} />
-          </div>
-          <div className="h-[400px] max-md:h-[300px] max-sm:h-[250px] w-full relative my-6">
-            <Image
-              src={`https:${blog.fields.thumbnail.fields.file.url}`}
-              alt={blog.fields.slug}
-              fill
-              className="object-fill"
-              priority
-            />
-          </div>
-          {documentToReactComponents(blog.fields.content, options)}
+          <p className="font-bold my-2">Recommendation</p>
+          <RecomendationBlog blogs={blogNe} />
+          <ShareButton slug={blog.fields.slug} />
         </div>
       </div>
-    </Wrapper>
+      <div className="flex-[2] box-content pr-56 max-lg:pr-0">
+        <div className="text-sm font-bold text-green-700 uppercase">
+          {blog.fields.category}
+        </div>
+        <div className="text-3xl max-md:text-2xl font-bold my-4">
+          {blog.fields.title}
+        </div>
+        <div className="flex gap-2 text-sm">
+          <span className="font-bold">{blog.fields.author.fields.name}</span>
+          <span>∙</span>
+          <span>{blog.fields.date}</span>
+        </div>
+        <div className="md:hidden">
+          <ShareButton slug={blog.fields.slug} />
+        </div>
+        <div className="h-[400px] max-md:h-[300px] max-sm:h-[250px] w-full relative my-6">
+          <Image
+            src={`https:${blog.fields.thumbnail.fields.file.url}`}
+            alt={blog.fields.slug}
+            fill
+            className="object-fill"
+            priority
+          />
+        </div>
+        {documentToReactComponents(blog.fields.content, options)}
+      </div>
+    </div>
   );
 }
