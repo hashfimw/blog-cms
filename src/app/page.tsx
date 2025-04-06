@@ -1,4 +1,3 @@
-import Navbar from "@/components/navbar";
 import Cards from "@/components/card";
 import { getBlogs } from "@/libs/blog";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
