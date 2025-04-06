@@ -62,8 +62,8 @@ export default async function BlogDetail({
   };
 
   return (
-    <div className="container mx-auto flex mt-6 w-full">
-      <div className=" flex-1 max-md:hidden">
+    <div className="container mx-auto flex pt-28 w-full px-4 md:px-6 ">
+      <div className="flex-1 max-md:hidden">
         <div className="sticky top-[100px]">
           <div className="text-sm flex items-center gap-1">
             <IoArrowBack />
@@ -77,7 +77,7 @@ export default async function BlogDetail({
         </div>
       </div>
       <div className="flex-[2] box-content pr-56 max-lg:pr-0">
-        <div className="text-sm font-bold text-green-700 uppercase">
+        <div className="text-sm font-bold text-gray-500 uppercase">
           {blog.fields.category}
         </div>
         <div className="text-3xl max-md:text-2xl font-bold my-4">
@@ -100,7 +100,15 @@ export default async function BlogDetail({
             priority
           />
         </div>
-        {documentToReactComponents(blog.fields.content, options)}
+        <div className="prose max-w-none">
+          {documentToReactComponents(blog.fields.content, options)}
+        </div>
+      </div>
+
+      {/* Mobile recommendation section */}
+      <div className="hidden max-md:block mt-8 w-full">
+        <p className="font-bold my-2">Recommendation</p>
+        <RecomendationBlog blogs={blogNe} />
       </div>
     </div>
   );
